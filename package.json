@@ -1,0 +1,19 @@
+{
+  "name": "stone-mountain-bike-co",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Stone Mountain Bike Company storefront redesign (Black Friday 2026 mockup) by Thanos Labs",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "preview": "npx serve@latest out"
+  },
+  "dependencies": {
+    "next": "^15.5.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "engines": {
+    "node": ">=18.18"
+  }
+}
