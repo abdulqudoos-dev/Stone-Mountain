@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import ProductPurchase from '@/components/ProductPurchase';
 import ProductCard from '@/components/ProductCard';
 import Faq from '@/components/Faq';
-import Reviews from '@/components/Reviews';
 import { MODELS, getModel } from '@/lib/products';
 import { SITE, titleFor } from '@/lib/site';
 
@@ -85,8 +84,6 @@ export default async function ProductPage({ params }) {
           </dl>
         </div>
       </section>
-
-      <Reviews slug={model.slug} />
 
       <Faq keys={faqKeys} />
 

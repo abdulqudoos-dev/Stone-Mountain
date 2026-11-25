@@ -84,9 +84,9 @@ Where it shows: a Ship / Pick up choice on every product page, a "Shipping and p
 
 **To make pickup real at checkout:** in Shopify admin, go to Settings, then Shipping and delivery, then Local pickup, and turn it on for the Atlanta location. Shoppers then see "Pick up" next to shipping at checkout.
 
-## Reviews (samples for now)
+## Reviews (off until real ones exist)
 
-The live store has no reviews, so `lib/reviews.js` holds sample reviews written to show the layout. Every one is labeled "Sample review" on the page, and the star averages are worked out from those samples only. Before launch, install a reviews app on the Shopify store (Judge.me or Shopify Product Reviews) or pull Google Business Profile reviews, put the real ones in `lib/reviews.js`, and remove the sample labels in `components/Reviews.jsx` and `components/ProductPurchase.jsx`.
+Sammy's rule (#proj-stone-mountain, Nov 24, 5:29 AM CT): no fake star ratings, real proof only. The live store has no reviews, so no reviews or stars render anywhere. `components/Reviews.jsx`, `components/Stars.jsx` and `lib/reviews.js` stay in the repo, unused. When real reviews exist (a Shopify reviews app such as Judge.me, or Google Business Profile reviews), put them in `lib/reviews.js` and add `<Reviews />` back to `app/page.jsx` and `app/products/[slug]/page.jsx`.
 
 ## Header and logo
 
@@ -124,7 +124,8 @@ The code is in `components/Analytics.jsx` and `lib/track.js`.
 ## Images
 
 - Product, detail and lifestyle photos: the client's own Shopify store (cdn.shopify.com).
-- Home hero and the four "Shop by how you ride" cards: generated for this mockup with noydflow (Midjourney v8), saved in `public/home/` as JPGs (hero 1456 px wide, cards 840 px). They're mood images, not the client's bikes, so no caption names a model.
+- Home hero: the real Yonah 600 composited onto a granite outcrop with noydflow (Nano Banana Pro), `public/home/hero-banner.jpg` (2400 x 1018). On desktop, `hero-bike.webp` is the same bike cut out and laid over itself so its front wheel sits in front of the red panel. On phones and tablets (1100 px and under), `hero-mobile.webp` (1600 x 1718) is built from the same banner: its left 1600 px, the sky faded to flat `#e4e9f0` and more rock added below, fading to `#15120f`. Each screen size downloads only its own photo.
+- The four "Shop by how you ride" cards: generated for this mockup with noydflow (Midjourney v8), saved in `public/home/` as JPGs (840 px). They're mood images, not the client's bikes, so no caption names a model.
 - The Atlanta pickup band uses a free Unsplash photo (Unsplash License): summit `photo-1722371183804-80f62e270406`. Other Unsplash IDs kept in `lib/images.js` as spares.
 - Fonts: Instrument Sans for everything, plus Rokkitt and Kaushan Script for the logo only (Google Fonts).
 - The logo is a type-set lockup with a Stone Mountain dome mark. Swap in the client's vector logo when it arrives.

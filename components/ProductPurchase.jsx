@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import Icon from './Icon';
 import PriceRequest from './PriceRequest';
-import Stars from './Stars';
-import { getReviews, summary } from '@/lib/reviews';
 import { formatPrice, percentOff, savings, storeLink } from '@/lib/products';
 import { SITE, SALE, SHIPPING, pickupWhere, shipsFree } from '@/lib/site';
 import { track } from '@/lib/track';
@@ -21,7 +19,6 @@ export default function ProductPurchase({ model }) {
   const variant = model.variants[vIndex];
   const images = variant.images;
   const onSale = model.bfPrice != null;
-  const rating = summary(getReviews(model.slug));
   const shipPrice = shipsFree(model) ? 'Free' : SHIPPING.otherRate != null ? `$${SHIPPING.otherRate}` : 'At checkout';
 
   const pickVariant = (i) => {
@@ -33,10 +30,7 @@ export default function ProductPurchase({ model }) {
     <div className="pdp">
       <div className="gallery">
         <div className="gallery__main">
-          <span className="bf-tab">
-            Black Friday
-            {onSale ? <b>{percentOff(model)}% off</b> : null}
-          </span>
+          <span className="bf-tab">Black Friday</span>
           <img
             key={images[iIndex]}
             src={images[iIndex]}
@@ -67,14 +61,6 @@ export default function ProductPurchase({ model }) {
       <div className="buy-panel">
         <span className="buy-panel__type">{model.type}</span>
         <h1>{model.name}</h1>
-        {rating.count ? (
-          <a className="buy-panel__rating" href="#reviews">
-            <Stars rating={rating.average} size={16} />
-            <span>
-              {rating.average.toFixed(1)} ({rating.count} sample reviews)
-            </span>
-          </a>
-        ) : null}
         <p className="buy-panel__tagline">{model.tagline}</p>
         <p className="buy-panel__summary">{model.summary}</p>
 

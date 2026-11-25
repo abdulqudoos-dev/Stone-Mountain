@@ -35,8 +35,9 @@ export default function RootLayout({ children }) {
         <a className="skip-link" href="#main">
           Skip to main content
         </a>
+        <PromoBar placement="top" />
         <Header />
-        <PromoBar />
+        <PromoBar placement="below" />
         <main id="main">{children}</main>
         <Footer />
         <MobileCallBar />

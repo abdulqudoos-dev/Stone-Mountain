@@ -269,6 +269,26 @@ export default function Header() {
           <Link className="btn btn--dark btn--sm header-cta" href="/black-friday">
             Shop the sale
           </Link>
+          {/* Phones and small tablets, after AQ's mockup: search and cart
+              open the live store, where checkout happens. */}
+          <a
+            className="header-icon"
+            href={`${SITE.storeUrl}/search`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Search the store (opens in a new tab)"
+          >
+            <Icon name="search" size={26} />
+          </a>
+          <a
+            className="header-icon"
+            href={`${SITE.storeUrl}/cart`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Cart on our store (opens in a new tab)"
+          >
+            <Icon name="cart" size={26} />
+          </a>
           <button
             type="button"
             className="menu-toggle"

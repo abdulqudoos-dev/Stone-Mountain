@@ -1,17 +1,14 @@
 import Link from 'next/link';
-import Icon from '@/components/Icon';
 import Photo from '@/components/Photo';
 import Hero from '@/components/Hero';
 import RideCarousel from '@/components/RideCarousel';
 import DealBoard from '@/components/DealBoard';
-import ProductShot from '@/components/ProductShot';
 import CompareTable from '@/components/CompareTable';
 import BuyBlock from '@/components/BuyBlock';
 import Faq from '@/components/Faq';
-import Reviews from '@/components/Reviews';
 import { SITE, titleFor } from '@/lib/site';
 import { HOME, shop } from '@/lib/images';
-import { BIKES, cover, formatPrice, getModel, savings } from '@/lib/products';
+import { BIKES } from '@/lib/products';
 
 export const metadata = {
   title: titleFor('Stone Mountain Bike Company'),
@@ -49,12 +46,12 @@ const DETAILS = [
   },
 ];
 
-const yonah = getModel('yonah-600');
-
 export default function HomePage() {
   return (
     <>
       <Hero />
+
+      <DealBoard />
 
       <section className="section rides-section" aria-labelledby="rides-title">
         <div className="container section-head">
@@ -66,68 +63,6 @@ export default function HomePage() {
           </Link>
         </div>
         <RideCarousel cards={HOME.rides} label="Ways to ride" />
-      </section>
-
-      <DealBoard />
-
-      <section className="section spotlight-section" aria-labelledby="yonah-title">
-        <div className="container spotlight">
-          <div className="spotlight__copy">
-            <h2 className="section-title" id="yonah-title">
-              Yonah 600
-            </h2>
-            <p className="lede">
-              The everyday e-bike: a 500W rear hub motor, a 48V LG battery and disc brakes, for commutes,
-              errands and hills.
-            </p>
-            <ul className="callouts">
-              <li>
-                <Icon name="bolt" size={22} />
-                <p>
-                  <b>500W rear hub motor.</b> Pedal assist for hills, headwinds and heavy bags.
-                </p>
-              </li>
-              <li>
-                <Icon name="battery" size={22} />
-                <p>
-                  <b>48V 9.6Ah LG battery.</b> Mounted on the downtube.
-                </p>
-              </li>
-              <li>
-                <Icon name="disc" size={22} />
-                <p>
-                  <b>180 mm disc brakes.</b> Tektro rotors, front and rear.
-                </p>
-              </li>
-              <li>
-                <Icon name="gauge" size={22} />
-                <p>
-                  <b>LCD display.</b> Speed, battery, distance and assist level.
-                </p>
-              </li>
-            </ul>
-            <div className="spotlight__buy">
-              <span className="spotlight__price">
-                {formatPrice(yonah.bfPrice ?? yonah.price)}
-                {yonah.bfPrice != null ? <s>{formatPrice(yonah.price)}</s> : null}
-                {savings(yonah) ? <small>Save {formatPrice(savings(yonah))}</small> : null}
-              </span>
-              <Link className="btn btn--dark" href="/products/yonah-600">
-                Shop the Yonah 600
-              </Link>
-            </div>
-          </div>
-          <div className="spotlight__media">
-            <ProductShot
-              src={cover(yonah)}
-              box={yonah.shot}
-              aspect={1.4}
-              pad={[0.04, 0.02, 0.04, 0.02]}
-              alt="Yonah 600 e-bike in charcoal, side view"
-              sizes="(max-width: 960px) 100vw, 60vw"
-            />
-          </div>
-        </div>
       </section>
 
       <section className="section section--flush-top" aria-labelledby="details-title">
@@ -184,8 +119,6 @@ export default function HomePage() {
           <CompareTable models={BIKES} />
         </div>
       </section>
-
-      <Reviews />
 
       <BuyBlock />
 

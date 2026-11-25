@@ -33,7 +33,8 @@ const POINTS = [
 ];
 
 export default function BuyBlock() {
-  const [slug, setSlug] = useState(BIKES[0].slug);
+  // Opens on the Bryce 800 so it doesn't repeat the hero's Yonah 600.
+  const [slug, setSlug] = useState('bryce-800');
   const [picked, setPicked] = useState(false);
   const bike = BIKES.find((b) => b.slug === slug) || BIKES[0];
   const price = bike.bfPrice ?? bike.price;

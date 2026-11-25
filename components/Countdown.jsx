@@ -32,15 +32,16 @@ export default function Countdown({ variant = 'compact' }) {
   // The ticking digits are hidden from screen readers; the label says it once.
   const label = ended ? 'The Black Friday sale has ended.' : `Sale ends ${SALE.endsLabel}.`;
 
-  if (variant === 'large') {
+  if (variant === 'large' || variant === 'hero') {
+    const short = variant === 'hero';
     const units = [
       ['Days', t.days],
       ['Hours', t.hours],
-      ['Minutes', t.minutes],
-      ['Seconds', t.seconds],
+      [short ? 'Min' : 'Minutes', t.minutes],
+      [short ? 'Sec' : 'Seconds', t.seconds],
     ];
     return (
-      <div className="countdown countdown--large">
+      <div className={`countdown countdown--${variant}`}>
         <p className="visually-hidden">{label}</p>
         <div className="countdown__units" aria-hidden="true">
           {units.map(([name, value]) => (

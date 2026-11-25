@@ -297,7 +297,10 @@ button {
 
 /* ---------- Promo bar ----------
    Sammy's brief: a plain black bar under the header. One line, one link,
-   no motion. */
+   no motion. That is the bar from 961px up (.promo-bar--below). Phones and
+   small tablets get AQ's mockup instead (.promo-bar--top, Nov 25): above
+   the header, a tag icon, the deal in two lines, the link and a close
+   button. */
 .promo-bar {
   background: var(--black);
   color: #fff;
@@ -321,10 +324,6 @@ button {
   font-weight: 600;
 }
 
-.promo-bar__short {
-  display: none;
-}
-
 .promo-bar__link {
   white-space: nowrap;
   color: #fff;
@@ -335,6 +334,98 @@ button {
 
 .promo-bar__link:hover {
   text-decoration-thickness: 2px;
+}
+
+.promo-bar--top {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .promo-bar--below {
+    display: none;
+  }
+
+  .promo-bar--top {
+    display: block;
+    font-size: 13px;
+    line-height: 1.28;
+  }
+
+  .promo-bar--top[hidden] {
+    display: none;
+  }
+
+  .promo-bar--top .promo-bar__inner {
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px 2px 8px clamp(12px, 3.5vw, 24px);
+    text-align: left;
+  }
+
+  .promo-bar__icon {
+    flex: none;
+    width: 22px;
+    height: 22px;
+  }
+
+  .promo-bar__deal {
+    min-width: 0;
+  }
+
+  .promo-bar__deal b {
+    color: var(--bf-yellow, #ffd400);
+  }
+
+  .promo-bar__when {
+    display: block;
+  }
+
+  .promo-bar--top .promo-bar__link {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding-left: 10px;
+    border-left: 1px solid rgba(255, 255, 255, 0.45);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .promo-bar--top .promo-bar__link span {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .promo-bar__close {
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin-left: -4px;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .promo-bar__close:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .promo-bar__close:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+  }
+}
+
+/* Phones: the deal in three short lines. */
+@media (max-width: 600px) {
+  .promo-bar__deal b {
+    display: block;
+  }
 }
 
 /* ---------- Header ----------
@@ -560,6 +651,53 @@ button {
 
 .header-phone:focus-visible {
   outline-offset: 4px;
+}
+
+/* Search and cart: phones and small tablets only (AQ's mockup). */
+.header-icon {
+  display: none;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--ink);
+  transition: background-color 0.2s ease;
+}
+
+.header-icon:hover {
+  background: rgba(17, 17, 17, 0.06);
+}
+
+@media (max-width: 960px) {
+  .header-icon {
+    display: inline-grid;
+  }
+
+  .site-header__actions {
+    gap: 4px;
+  }
+}
+
+/* Small phones: logo, search, cart and menu on one row. */
+@media (max-width: 430px) {
+  .site-header__inner {
+    column-gap: 6px;
+  }
+
+  .site-header__actions {
+    gap: 0;
+  }
+
+  .site-header .header-icon,
+  .site-header .menu-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .header-icon .icon {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .menu-toggle {
@@ -849,187 +987,593 @@ button {
 }
 
 /* ---------- Home hero ----------
-   Full-bleed media, one orchestrated entrance: the picture settles from a
-   slow push-in while the words rise. */
-.hero {
+   After AQ's mockup (Nov 25) on Sammy's Bike24 brief. One full-width photo
+   (the Yonah 600 on granite above misty ridges). Over its right side sits a
+   see-through red layer: it multiplies onto the photo, so the ridges and fog
+   read through as darker and lighter red. The layer is slanted on its left
+   edge, with a streak of light along the slant. One entrance: the words
+   rise. */
+.bf-hero {
+  --bf-red: #d0021b;
+  --bf-yellow: #ffd400; /* display sizes only on the red */
   position: relative;
   isolation: isolate;
-  min-height: max(620px, calc(100svh - var(--header-h) - 44px));
-  display: grid;
-  grid-template-rows: 1fr auto;
-  color: #fff;
   overflow: hidden;
-  background: #1d1c1a;
+  display: flex;
+  justify-content: flex-end;
+  min-height: clamp(520px, 41.5vw, 680px);
+  background: #b9c3c4;
 }
 
-.hero__media {
+/* The photo and the cut-out bike each sit in a frame with the photo's
+   proportions, sized to cover the hero (like object-fit: cover, anchored
+   left and 58% down), so the two bikes line up exactly. No entrance on the
+   photo: an animated photo becomes its own GPU layer, and Chrome then draws
+   seams along the slanted red layers above it. */
+.bf-hero__scene,
+.bf-hero__front {
   position: absolute;
   inset: 0;
-  z-index: -2;
   overflow: hidden;
+  container-type: size;
+  pointer-events: none;
 }
 
-.hero__img,
-.hero__video {
+.bf-hero__scene {
+  z-index: -4;
+}
+
+.bf-hero__frame {
+  position: absolute;
+  left: 0;
+  top: 58%;
+  translate: 0 -58%;
+  width: max(100cqw, 100cqh * 2.3576);
+  aspect-ratio: 2400 / 1018;
+}
+
+.bf-hero__frame img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  animation: hero-settle 2.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@keyframes hero-settle {
-  from {
-    transform: scale(1.08);
-  }
+/* Above the red layers (they sit at -3 to -1), below the words. */
+.bf-hero__front .bf-hero__bike {
+  inset: auto;
+  height: auto;
 }
 
-.hero::after {
+.bf-hero__caption {
+  position: absolute;
+  left: clamp(20px, 2.5vw, 40px);
+  bottom: clamp(18px, 2.4vw, 32px);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(17, 17, 17, 0.55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 15px;
+  text-decoration: none;
+  transition: background-color 0.25s ease;
+}
+
+.bf-hero__caption:hover {
+  background: rgba(17, 17, 17, 0.75);
+}
+
+.bf-hero__caption b {
+  font-weight: 600;
+}
+
+.bf-hero__caption s {
+  margin-left: 6px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* The red layer covers the right half. Its left edge slants from 20% of
+   its width at the top to 0 at the bottom, through the front wheel, which
+   the cut-out bike keeps in front of it. */
+.bf-hero__panel {
+  position: relative;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(32px, 3.6vw, 56px) clamp(20px, 2.6vw, 44px) clamp(32px, 3.6vw, 56px) 13%;
+  color: #fff;
+}
+
+.bf-hero__panel::before,
+.bf-hero__panel::after {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(60% 52% at 50% 46%, rgba(0, 0, 0, 0.44), rgba(0, 0, 0, 0) 76%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.48) 0%, rgba(0, 0, 0, 0.1) 34%, rgba(0, 0, 0, 0) 52%),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.66) 0%, rgba(0, 0, 0, 0) 36%);
+  clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%);
 }
 
-.hero__content {
-  align-self: center;
-  justify-self: center;
+/* Multiply: the photo shows through as red. */
+.bf-hero__panel::before {
+  z-index: -3;
+  background: linear-gradient(105deg, #ff1d33 0%, #e3001d 38%, #b30016 100%);
+  mix-blend-mode: multiply;
+}
+
+/* A thin wash of flat red on top keeps it saturated over the bright fog. */
+.bf-hero__panel::after {
+  z-index: -2;
+  background: linear-gradient(105deg, rgba(232, 0, 30, 0.42), rgba(160, 0, 20, 0.5));
+}
+
+/* Light along the slant: a bright core and a softer glow that spills a
+   little onto the photo. */
+.bf-hero__streak {
+  position: absolute;
+  inset: 0 0 0 -12%; /* reaches past the slant so the glow can spill */
+  z-index: -1;
+  pointer-events: none;
+  clip-path: polygon(17% 0, 40% 0, 22% 100%, -1% 100%);
+  background:
+    linear-gradient(103.5deg, rgba(255, 120, 130, 0) 21.6%, rgba(255, 150, 158, 0.95) 24.2%, rgba(255, 120, 130, 0) 26.8%),
+    linear-gradient(103.5deg, rgba(255, 40, 60, 0) 16.8%, rgba(255, 40, 60, 0.5) 24.2%, rgba(255, 40, 60, 0) 31.6%);
+  mix-blend-mode: screen;
+}
+
+.bf-hero__copy {
   display: grid;
   justify-items: center;
   text-align: center;
-  max-width: 1120px;
-  padding: clamp(56px, 9vh, 112px) var(--pad) 48px;
+  width: 100%;
+  max-width: 540px;
+  text-shadow: 0 1px 2px rgba(60, 0, 6, 0.25);
 }
 
-.hero__content > * {
+.bf-hero__copy > * {
   animation: rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.hero__content > :nth-child(2) {
-  animation-delay: 0.08s;
+.bf-hero__copy > :nth-child(2) {
+  animation-delay: 0.06s;
 }
 
-.hero__content > :nth-child(3) {
-  animation-delay: 0.16s;
+.bf-hero__copy > :nth-child(3) {
+  animation-delay: 0.12s;
 }
 
-.hero__content > :nth-child(4) {
+.bf-hero__copy > :nth-child(4) {
+  animation-delay: 0.18s;
+}
+
+.bf-hero__copy > :nth-child(5) {
   animation-delay: 0.24s;
 }
 
-.hero__content > :nth-child(5) {
-  animation-delay: 0.32s;
+.bf-hero__copy > :nth-child(6) {
+  animation-delay: 0.3s;
 }
 
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(18px);
   }
 }
 
-/* Same two-part tab as the product cards: black label, red saving. */
-.hero__deal {
-  display: inline-flex;
+.bf-hero__kicker {
+  display: flex;
   align-items: center;
-  gap: 14px;
-  height: 36px;
-  padding-right: 16px;
-  margin-bottom: 26px;
-  border-radius: 999px;
-  overflow: hidden;
-  background: var(--red);
-  font-size: 15px;
+  gap: 12px;
+  margin-bottom: clamp(10px, 1.2vw, 16px);
+  font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
-.hero__deal b {
-  align-self: stretch;
-  display: flex;
-  align-items: center;
-  padding: 0 14px;
-  background: var(--black);
-  font-weight: 600;
+.bf-hero__kicker::before,
+.bf-hero__kicker::after {
+  content: '';
+  width: 24px;
+  height: 1.5px;
+  background: currentColor;
+  opacity: 0.75;
 }
 
-.hero__title {
-  font-size: clamp(50px, 7.8vw, 124px);
-  line-height: 0.92;
-  letter-spacing: -0.055em;
-  font-weight: 600;
-  text-wrap: balance;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 32px rgba(0, 0, 0, 0.28);
+/* Heavy, slanted display type: the variable font's 700, slanted and
+   thickened a touch with a stroke, as in the mockup. */
+.bf-hero__title {
+  display: grid;
+  font-size: clamp(60px, 6.5vw, 124px);
+  line-height: 0.86;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  -webkit-text-stroke: 0.022em currentColor;
+  paint-order: stroke fill;
+  text-shadow: 0 8px 26px rgba(60, 0, 6, 0.35);
 }
 
-.hero__sub {
-  margin: 24px auto 0;
-  max-width: 44ch;
-  font-size: clamp(18px, 1.5vw, 21px);
+.bf-hero__title span:last-child {
+  color: var(--bf-yellow);
+}
+
+.bf-hero__deal {
+  margin-top: clamp(14px, 1.5vw, 22px);
+  font-size: clamp(22px, 2.1vw, 36px);
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.bf-hero__deal em {
+  font-style: normal;
+  color: var(--bf-yellow);
+}
+
+.bf-hero__sub {
+  margin-top: 10px;
+  font-size: clamp(14px, 1.1vw, 17px);
   line-height: 1.45;
-  color: rgba(255, 255, 255, 0.92);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.94);
 }
 
-/* The deadline sits in a frosted pill of its own, under the sentence. */
-.hero__ends {
-  margin-top: 24px;
+.countdown--hero {
+  margin-top: clamp(16px, 1.7vw, 24px);
 }
 
-.hero .sale-ends {
-  padding: 5px 5px 5px 14px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.36);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+.countdown--hero .countdown__units {
+  gap: 8px;
+}
+
+.countdown--hero .countdown__unit {
+  min-width: 62px;
+  padding: 9px 8px 7px;
+  border-radius: 10px;
+  background: rgba(30, 0, 4, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.countdown--hero .countdown__num {
   color: #fff;
+  font-size: clamp(24px, 2vw, 32px);
 }
 
-.hero .sale-ends__left {
-  background: #fff;
-  color: var(--ink);
+.countdown--hero .countdown__label {
+  margin-top: 5px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
 }
 
-.hero .hero-actions {
+.bf-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  margin-top: 30px;
+  gap: 12px;
+  margin-top: clamp(18px, 2vw, 26px);
 }
 
-.hero__facts {
-  width: 100%;
+/* The phone and tablet photo (see below) is hidden on desktop. */
+.bf-hero__stage {
+  display: none;
+}
+
+/* ---------- Home hero, phones and tablets ----------
+   After AQ's phone mockup (Nov 25). The photo runs top to bottom: dark
+   words on the pale sky, the bike on its rock in the middle, the sale
+   clock and buttons on the rock as it falls into shadow, then the
+   promises strip on the dark.
+   The photo (public/home/hero-mobile.webp, 1600 x 1718) is the banner's
+   left 1600px with its top faded to --hero-sky and extra rock below fading
+   to --hero-dark. The bike in it spans x 166 to 1427 and y 179 to 883.
+   The stage holds the band from y 157 to 907 (bike plus a little air) in
+   the page flow, between the words and the clock; the photo overhangs it
+   above and below, and the stage's ::before and ::after carry on its flat
+   sky and dark to the hero's edges. --k is CSS px per photo px, set so the
+   bike is 88% of the hero's width. */
+:root {
+  --hero-sky: #e4e9f0;
+  --hero-dark: #15120f;
+}
+
+@media (max-width: 1100px) {
+  .bf-hero {
+    --bf-red: #dc0019;
+    display: block;
+    min-height: 0;
+    container-type: inline-size;
+    /* Sky behind the top, dark behind the bottom: no hairline of sky can
+       show where the hero meets the dark strip. */
+    background: linear-gradient(var(--hero-sky) 50%, var(--hero-dark) 50%);
+    color: #151515;
+  }
+
+  .bf-hero__scene,
+  .bf-hero__front,
+  .bf-hero__caption,
+  .bf-hero__streak,
+  .bf-hero__panel::before,
+  .bf-hero__panel::after {
+    display: none;
+  }
+
+  .bf-hero__panel {
+    width: auto;
+    display: block;
+    padding: clamp(26px, 6.5cqi, 48px) var(--pad) clamp(30px, 7cqi, 48px);
+    color: inherit;
+  }
+
+  .bf-hero__copy {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: none;
+    text-shadow: none;
+  }
+
+  .bf-hero__kicker {
+    gap: clamp(10px, 3cqi, 16px);
+    font-size: clamp(11px, 2.9cqi, 14px);
+    letter-spacing: 0.24em;
+    color: #1c1c1c;
+  }
+
+  .bf-hero__kicker::before,
+  .bf-hero__kicker::after {
+    width: clamp(18px, 7cqi, 72px);
+    opacity: 0.9;
+  }
+
+  .bf-hero__title {
+    font-size: clamp(64px, 19.5cqi, 128px);
+    line-height: 0.84;
+    color: #121212;
+    text-shadow: none;
+  }
+
+  .bf-hero__title span:last-child {
+    color: var(--bf-red);
+  }
+
+  .bf-hero__deal {
+    margin-top: clamp(12px, 3.4cqi, 22px);
+    font-size: clamp(25px, 6.8cqi, 40px);
+    color: #151515;
+  }
+
+  .bf-hero__deal em {
+    color: var(--bf-red);
+  }
+
+  .bf-hero__sub {
+    max-width: 34em;
+    margin-top: 8px;
+    font-size: clamp(15px, 3.9cqi, 18px);
+    line-height: 1.4;
+    color: #2d2d2b;
+  }
+
+  .bf-hero__stage {
+    --k: calc(88cqi / 1261);
+    display: block;
+    position: relative;
+    z-index: -1;
+    justify-self: stretch;
+    height: calc(var(--k) * 750);
+    margin: clamp(2px, 1.5cqi, 12px) calc(-1 * var(--pad)) 0;
+    animation: none;
+  }
+
+  .bf-hero__stage img {
+    position: absolute;
+    left: calc(50% - var(--k) * 796.5);
+    top: calc(var(--k) * -157);
+    width: calc(var(--k) * 1600);
+    max-width: none;
+    height: auto;
+  }
+
+  .bf-hero__stage::before,
+  .bf-hero__stage::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+
+  .bf-hero__stage::before {
+    bottom: calc(100% + var(--k) * 157 - 1px);
+    height: 1600px;
+    background: var(--hero-sky);
+  }
+
+  .bf-hero__stage::after {
+    top: calc(var(--k) * (1718 - 157) - 1px);
+    height: 2400px;
+    background: var(--hero-dark);
+  }
+
+  /* Shadow over the rock, fixed to the hero's bottom edge, so the
+     buttons always sit on dark and the hero meets the dark strip under it
+     without a seam, whatever the photo's scale. Above the photo (same
+     layer, later in the page), below the words. */
+  .bf-hero::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    height: 270px;
+    background: linear-gradient(
+      to top,
+      var(--hero-dark) 0,
+      rgba(21, 18, 15, 0.9) 44px,
+      rgba(21, 18, 15, 0.6) 110px,
+      rgba(21, 18, 15, 0.2) 190px,
+      rgba(21, 18, 15, 0) 270px
+    );
+    pointer-events: none;
+  }
+
+  /* The clock on the rock, just under the tyres. */
+  .countdown--hero {
+    margin-top: clamp(4px, 1.6cqi, 14px);
+  }
+
+  .countdown--hero .countdown__units {
+    width: auto;
+    gap: clamp(8px, 2.6cqi, 14px);
+  }
+
+  .countdown--hero .countdown__unit {
+    flex: none;
+    min-width: clamp(62px, 16.5cqi, 84px);
+    padding: clamp(8px, 2.2cqi, 12px) 6px clamp(7px, 2cqi, 10px);
+    border-radius: 10px;
+    background: rgba(12, 11, 10, 0.92);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 6px 18px rgba(0, 0, 0, 0.28);
+  }
+
+  .countdown--hero .countdown__num {
+    font-size: clamp(30px, 8.6cqi, 40px);
+  }
+
+  .countdown--hero .countdown__label {
+    margin-top: 3px;
+    font-size: clamp(12px, 3.3cqi, 15px);
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  .bf-hero__actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: clamp(14px, 4cqi, 24px);
+  }
+
+  .bf-hero__actions .btn {
+    width: min(100%, clamp(250px, 70cqi, 340px));
+    min-height: 50px;
+    font-size: 17px;
+  }
+
+  .bf-hero .bf-hero__shop {
+    background: var(--bf-red);
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(160, 0, 18, 0.35);
+  }
+
+  .bf-hero .bf-hero__shop:hover {
+    background: #b80016;
+  }
+}
+
+/* White button on the red: red text, arrow nudges on hover. */
+.btn--white {
+  background: #fff;
+  color: var(--bf-red, var(--red));
+  gap: 8px;
+}
+
+.btn--white:hover {
+  background: #fff1f2;
+}
+
+.btn--white .icon {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn--white:hover .icon {
+  transform: translateX(3px);
+}
+
+/* Proof strip under the hero: the store's real promises, not awards. */
+.proof-strip {
   max-width: var(--max);
-  justify-self: center;
-  padding: 22px var(--pad) 28px;
+  margin: 0 auto;
+  padding: 26px var(--pad);
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.24);
+  border-bottom: 1px solid var(--line);
 }
 
-.hero__facts li {
+.proof-strip li {
   display: flex;
   gap: 12px;
   align-items: flex-start;
   font-size: 15px;
   line-height: 1.35;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--ink-2);
 }
 
-.hero__facts .icon {
+.proof-strip .icon {
   flex: none;
-  color: #fff;
+  color: var(--brand);
 }
 
-.hero__facts b {
+.proof-strip b {
   display: block;
-  color: #fff;
+  color: var(--ink);
   font-weight: 600;
+}
+
+/* Phones and tablets: the strip carries on the hero's dark, three
+   promises side by side, icon over words, as in AQ's phone mockup. */
+@media (max-width: 1100px) {
+  .proof-strip {
+    max-width: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    padding: 4px max(8px, calc((100% - 760px) / 2)) 30px;
+    background: var(--hero-dark);
+    border-bottom: 0;
+  }
+
+  .proof-strip li {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 2px 8px;
+    text-align: center;
+    font-size: clamp(14px, 3.6vw, 16px);
+    line-height: 1.25;
+  }
+
+  .proof-strip li + li {
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  /* Shipping, pickup and the warranty. */
+  .proof-strip li:nth-child(3),
+  .proof-strip li:nth-child(5) {
+    display: none;
+  }
+
+  .proof-strip .icon {
+    width: 30px;
+    height: 30px;
+    color: #fff;
+    stroke-width: 1.4;
+  }
+
+  .proof-strip b {
+    color: #fff;
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  .proof-strip__text {
+    display: none;
+  }
 }
 
 /* ---------- Shop by how you ride ---------- */
@@ -1124,41 +1668,78 @@ button {
   margin-top: 20px;
 }
 
-/* ---------- Deal board: the page's one loud moment ---------- */
-.deals {
-  background: var(--black);
-  color: #fff;
-  padding-block: clamp(80px, 9vw, 136px);
-  overflow: hidden;
-}
-
-.deals__title {
-  font-size: clamp(76px, 21vw, 330px);
-  line-height: 0.8;
-  letter-spacing: -0.05em;
-  font-weight: 700;
-  font-stretch: 75%;
-  margin: 0 0 clamp(40px, 5vw, 72px) -0.04em;
-  white-space: nowrap;
-}
-
-.deals__row {
+/* ---------- Deals grid, straight under the hero ----------
+   Calm on purpose: the red hero is the loud moment. */
+.deals__head {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
-  gap: 28px 48px;
-  margin-bottom: clamp(40px, 5vw, 64px);
+  gap: 24px 48px;
+  margin-bottom: clamp(32px, 4vw, 48px);
+}
+
+.deals__kicker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.deals__kicker::before {
+  content: '';
+  width: 28px;
+  height: 1.5px;
+  background: currentColor;
+}
+
+/* Phones: centred, a rule each side of the label (AQ's mockup). */
+@media (max-width: 640px) {
+  .section.deals {
+    padding-top: 44px;
+  }
+
+  .deals__head {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .deals__kicker {
+    justify-content: center;
+    color: var(--ink);
+  }
+
+  .deals__kicker::after {
+    content: '';
+    width: 28px;
+    height: 1.5px;
+    background: currentColor;
+  }
+
+  .deals__kicker::before,
+  .deals__kicker::after {
+    width: clamp(36px, 14vw, 64px);
+  }
+
+  .deals__lede {
+    display: none;
+  }
 }
 
 .deals__lede {
-  max-width: 42ch;
-  font-size: clamp(18px, 1.5vw, 21px);
+  margin-top: 14px;
+  max-width: 46ch;
+  font-size: clamp(17px, 1.4vw, 20px);
   line-height: 1.45;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--ink-2);
 }
 
 .deals__lede a {
-  color: #fff;
+  color: var(--ink);
   font-weight: 600;
   white-space: nowrap;
 }
@@ -1169,43 +1750,42 @@ button {
 }
 
 .countdown__unit {
-  min-width: 92px;
-  padding: 16px 14px 12px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  min-width: 76px;
+  padding: 12px 10px 10px;
+  border-radius: 14px;
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--line);
   text-align: center;
 }
 
 .countdown__num {
   display: block;
-  font-size: clamp(38px, 3.6vw, 54px);
+  font-size: clamp(30px, 2.6vw, 40px);
   line-height: 1;
   font-weight: 700;
   font-stretch: 75%;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
+  color: var(--ink);
 }
 
 .countdown__label {
   display: block;
-  margin-top: 10px;
+  margin-top: 8px;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--ink-2);
 }
 
 .deals .product-card {
-  box-shadow: none;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
 }
 
 .deals .product-card:hover {
-  box-shadow: none;
   transform: translateY(-4px);
 }
 
 .deals__foot {
-  margin-top: 40px;
+  margin-top: 36px;
   display: flex;
   align-items: center;
   gap: 16px 28px;
@@ -1214,20 +1794,19 @@ button {
 
 .deals__addon {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--ink-2);
 }
 
 .deals__addon b {
-  color: #fff;
+  color: var(--ink);
 }
 
 .deals__addon s {
   margin-left: 6px;
-  color: rgba(255, 255, 255, 0.55);
 }
 
 .deals__addon a {
-  color: #fff;
+  color: var(--ink);
   font-weight: 600;
   text-underline-offset: 3px;
 }
@@ -1382,8 +1961,8 @@ button {
   display: block;
 }
 
-/* Sammy's spec: a black "Black Friday" tab, top left of every product box.
-   The red end carries the saving. */
+/* Sammy's spec (Bike24 reference): a black "Black Friday" pill, top left
+   of every product box. */
 .bf-tab {
   position: absolute;
   top: 14px;
@@ -1402,13 +1981,6 @@ button {
   padding-left: 12px;
   padding-right: 12px;
   white-space: nowrap;
-}
-
-.bf-tab b {
-  margin: 0 -12px 0 10px;
-  padding: 0 12px;
-  background: var(--red);
-  font-weight: 600;
 }
 
 .product-card__body {
@@ -1767,7 +2339,7 @@ button {
   inset: 0;
   width: 100%;
   height: 100%;
-  overflow: visible;
+  overflow: hidden;
   pointer-events: none;
 }
 
@@ -2045,6 +2617,8 @@ button {
 
 .newsletter {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   gap: 12px;
 }
 
@@ -3128,17 +3702,9 @@ button {
     order: -1;
   }
 
-  .deals__row {
+  .deals__head {
     grid-template-columns: minmax(0, 1fr);
     align-items: start;
-  }
-
-  .hero__facts {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .hero__facts li:nth-child(n + 4) {
-    display: none;
   }
 
   .review-grid,
@@ -3177,23 +3743,6 @@ button {
     font-size: 16px;
   }
 
-  .promo-bar {
-    font-size: 15px;
-  }
-
-  .promo-bar__long {
-    display: none;
-  }
-
-  .promo-bar__short {
-    display: inline;
-  }
-
-  .promo-bar__inner {
-    flex-wrap: nowrap;
-    gap: 12px;
-  }
-
   .logo {
     gap: 8px;
   }
@@ -3210,48 +3759,12 @@ button {
     font-size: 1.25rem;
   }
 
-  .hero {
-    min-height: max(560px, calc(100svh - var(--header-h) - 44px));
-  }
-
-  .hero__title {
-    font-size: clamp(44px, 13vw, 60px);
-  }
-
-  .hero__deal {
-    font-size: 14px;
-  }
-
-  .hero .hero-actions {
-    width: 100%;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .hero__facts {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
-
-  .hero__facts li {
-    font-size: 13px;
-    gap: 10px;
-  }
-
-  .hero__facts li:nth-child(n + 3) {
-    display: none;
-  }
-
   .sale-ends__long {
     display: none;
   }
 
   .sale-ends__short {
     display: inline;
-  }
-
-  .hero .sale-ends {
-    font-size: 14px;
   }
 
   .ride-card__caption {
@@ -3268,10 +3781,6 @@ button {
     flex: 1;
     min-width: 0;
     padding: 12px 6px 10px;
-  }
-
-  .deals__title {
-    font-size: clamp(64px, 23vw, 120px);
   }
 
   .band__actions {
@@ -3337,11 +3846,6 @@ button {
     padding-left: 9px;
     padding-right: 9px;
     font-size: 11px;
-  }
-
-  .bf-tab b {
-    margin: 0 -9px 0 7px;
-    padding: 0 9px;
   }
 
   .detail-card p {
@@ -3424,15 +3928,31 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__video {
-    display: none;
-  }
-
   *,
   *::before,
   *::after {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Small phones: a slightly smaller logo leaves room for search, cart and
+   the menu (AQ's phone mockup). */
+@media (max-width: 430px) {
+  .logo {
+    gap: 7px;
+  }
+
+  .logo__mark {
+    width: 27px;
+  }
+
+  .logo__slab {
+    font-size: 0.875rem;
+  }
+
+  .logo__script {
+    font-size: 1.0625rem;
   }
 }

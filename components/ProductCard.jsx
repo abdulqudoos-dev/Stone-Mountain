@@ -3,17 +3,14 @@ import ProductShot from './ProductShot';
 import { cover, formatPrice, percentOff, savings } from '@/lib/products';
 import { shipsFree } from '@/lib/site';
 
-// Product card. The black "Black Friday" tab is Sammy's rule; its red half
-// carries the saving, so the tab tells the shopper something.
+// Product card. The black "Black Friday" pill, top left of the photo, is
+// Sammy's rule from the Bike24 reference (#proj-stone-mountain, Nov 24).
 export default function ProductCard({ model, priority = false, compact = false }) {
   const off = percentOff(model);
   return (
     <Link href={`/products/${model.slug}`} className={`product-card ${compact ? 'product-card--compact' : ''}`}>
       <span className="product-card__media">
-        <span className="bf-tab">
-          Black Friday
-          {off ? <b>{off}% off</b> : null}
-        </span>
+        <span className="bf-tab">Black Friday</span>
         <ProductShot
           src={cover(model)}
           box={model.shot}
@@ -33,7 +30,7 @@ export default function ProductCard({ model, priority = false, compact = false }
         </span>
         <span className="product-card__foot">
           <span className="product-card__save">
-            {savings(model) ? `Save ${formatPrice(savings(model))}` : 'Call for sale price'}
+            {savings(model) ? `Save ${formatPrice(savings(model))} (${off}% off)` : 'Call for sale price'}
           </span>
           {model.variants.length > 1 ? (
             <span className="swatches" aria-label={`${model.variants.length} colors`}>
